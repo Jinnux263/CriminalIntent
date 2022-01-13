@@ -10,6 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.TextView
 import java.text.DateFormat
+import android.content.Intent
+
+
+
 
 
 class CrimeListFragment : Fragment() {
@@ -25,7 +29,7 @@ class CrimeListFragment : Fragment() {
 
         init {
             itemView.setOnClickListener {
-                val intent = CrimeActivity.newIntent(view.context, mCrime.getId())
+                val intent = CrimePagerActivity.newIntent(view.context, mCrime.getId())
                 view.context.startActivity(intent)
             }
         }
