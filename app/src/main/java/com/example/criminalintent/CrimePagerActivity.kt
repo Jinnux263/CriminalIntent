@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import android.content.Intent
+import android.widget.Button
 import androidx.viewpager2.widget.ViewPager2
 import java.util.*
 
@@ -15,6 +16,8 @@ import java.util.*
 class CrimePagerActivity : AppCompatActivity() {
     private lateinit var mViewPager: ViewPager2
     private lateinit var mCrimes: List<Crime>
+    private lateinit var mFirstButton: Button
+    private lateinit var mLastButton: Button
 
     // companion object cho fragment hay activity khác tạo intent
     // có extra cần thiết
@@ -61,5 +64,38 @@ class CrimePagerActivity : AppCompatActivity() {
             }
         }
 
+        mFirstButton = findViewById<View>(R.id.first_crime) as Button
+        mFirstButton.setOnClickListener { mViewPager.currentItem = 0 }
+
+        mLastButton = findViewById<View>(R.id.last_crime) as Button
+        mLastButton.setOnClickListener { mViewPager.currentItem = mCrimes.size - 1 }
+
+        // Sau khi kết thúc fragment thì Call back có được hủy đi không hay bị leak memory
+        mViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                if (mViewPager.currentItem == 0) {
+                    mFirstButton.visibility = View.INVISIBLE
+                } else {
+                    mFirstButton.visibility = View.VISIBLE
+                }
+                if (mViewPager.currentItem == mViewPager.adapter!!.itemCount - 1) {
+                    mLastButton.visibility = View.INVISIBLE
+                } else {
+                    mLastButton.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onPageSelected(position: Int) {}
+            override fun onPageScrollStateChanged(state: Int) {}
+        })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        /*mViewPager.unregisterOnPageChangeCallback(mViewPager.get)*/
     }
 }
