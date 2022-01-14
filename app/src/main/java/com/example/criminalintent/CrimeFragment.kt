@@ -10,6 +10,7 @@ import android.text.TextWatcher
 import android.widget.Button
 import android.widget.EditText
 import android.widget.CheckBox
+import androidx.fragment.app.FragmentManager
 import java.util.*
 
 class CrimeFragment : Fragment() {
@@ -22,6 +23,8 @@ class CrimeFragment : Fragment() {
     // gắn bundle có crimeId
     companion object {
         private const val ARG_CRIME_ID = "crime_id"
+        private const val DIALOG_DATE = "DialogDate"
+
         fun newInstance(crimeId: UUID?): CrimeFragment {
             val args = Bundle()
             args.putSerializable(ARG_CRIME_ID, crimeId)
@@ -67,11 +70,15 @@ class CrimeFragment : Fragment() {
 
         mDateButton = v.findViewById<View>(R.id.crime_date) as Button
         mDateButton?.text = mCrime!!.getDate().toString()
-        mDateButton?.isEnabled = false
+        mDateButton!!.setOnClickListener {
+            val manager: FragmentManager = parentFragmentManager
+            val dialog = DatePickerFragment()
+            dialog.show(manager, DIALOG_DATE)
+        }
 
         mSolvedCheckBox = v.findViewById<View>(R.id.crime_solved) as CheckBox
         mSolvedCheckBox!!.isChecked = mCrime!!.isSolved()
-        mSolvedCheckBox!!.setOnCheckedChangeListener { buttonView, isChecked ->
+        mSolvedCheckBox!!.setOnCheckedChangeListener { _, isChecked ->
             mCrime!!.setSolved(
                 isChecked
             )
