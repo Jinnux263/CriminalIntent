@@ -72,7 +72,7 @@ class CrimeFragment : Fragment() {
         mDateButton?.text = mCrime!!.getDate().toString()
         mDateButton!!.setOnClickListener {
             val manager: FragmentManager = parentFragmentManager
-            val dialog = DatePickerFragment()
+            val dialog = DatePickerFragment.newInstance(mCrime!!.getDate());
             dialog.show(manager, DIALOG_DATE)
         }
 
